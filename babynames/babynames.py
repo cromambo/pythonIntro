@@ -33,16 +33,40 @@ Suggested milestones for incremental development:
  -Build the [year, 'name rank', ... ] list and print it
  -Fix main() to use the extract_names list
 """
-
 def extract_names(filename):
   """
   Given a file name for baby.html, returns a list starting with the year string
   followed by the name-rank strings in alphabetical order.
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
-  # +++your code here+++
-  return
+  file = open(filename)
+  contents = file.read()
+  file.close()
+  
+  year = re.findall('Popularity in (\d\d\d\d)', contents)[0]
+  ranknamename = re.findall('(\d+)[<>/td\s]+([\w]+)[<>/td\s]+(\w+)</td>', contents)
+  rankdict = {}
+  for ranktuple in ranknamename:
+    rankdict[ranktuple[1]] = ranktuple[0]
+    rankdict[ranktuple[2]] = ranktuple[0]
+  
+  retlist = []
+  retlist.append(year)
+  for key in sorted(rankdict.keys()):
+    retlist.append('%s %s' %(key, rankdict[key]))  
+  return retlist
 
+def printRankListToFile(ranklist, filename):
+  outfile = open(filename, 'w')
+  for element in ranklist:
+    outfile.write('%s\n' %(element))
+  outfile.close()
+  return
+  
+def printRankList(ranklist):
+  for element in ranklist:
+    print (element)
+  return
 
 def main():
   # This command-line parsing code is provided.
@@ -51,7 +75,7 @@ def main():
   args = sys.argv[1:]
 
   if not args:
-    print 'usage: [--summaryfile] file [file ...]'
+    print ('usage: [--summaryfile] file [file ...]')
     sys.exit(1)
 
   # Notice the summary flag and remove it from args if it is present.
@@ -60,9 +84,16 @@ def main():
     summary = True
     del args[0]
 
-  # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
+  for filename in args:
+    ranklist = extract_names(filename)
+    if summary:
+      print ('printing to file', filename + '.summary')
+      printRankListToFile(ranklist, filename + '.summary')
+    else:
+      printRankList(ranklist)
+  
   
 if __name__ == '__main__':
   main()
