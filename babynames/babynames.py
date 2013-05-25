@@ -8,6 +8,7 @@
 
 import sys
 import re
+import os
 
 """Baby Names exercise
 
@@ -84,9 +85,14 @@ def main():
     summary = True
     del args[0]
 
+  filelist = []
+  for dircontents in os.listdir():
+    match = re.search('baby\d\d\d\d.html', dircontents)
+    if match: filelist.append(match.group())
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
-  for filename in args:
+
+  for filename in filelist:
     ranklist = extract_names(filename)
     if summary:
       print ('printing to file', filename + '.summary')
