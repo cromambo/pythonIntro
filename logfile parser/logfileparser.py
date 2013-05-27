@@ -27,14 +27,19 @@ def ParseLogFile(filename, linecount):
       times = re.findall('\s(\d\d):(\d\d):(\d\d)', line)
       #minheap format ( dif, string of entire line ), heap sorts by dif
       if len(times) == 2:
-        startseconds = (int)(times[0][0])*60*60 + (int)(times[0][1])*60 + (int)(times[0][2])
-        endseconds = (int)(times[1][0])*60*60 + (int)(times[1][1])*60 + (int)(times[1][2])
-        dif = math.fabs(endseconds - startseconds)
-        addIfTopOnePercent(minheap, dif, line, maxKeptLines)
+        dif = FindTimeDifInSeconds(times)
+        addIfHighestWithMaxLineCap(minheap, dif, line, maxKeptLines)
     
   return minheap
 
-def addIfTopOnePercent(minheap, dif, line, maxKeptLines):
+def FindTimeDifInSeconds(times):
+  startseconds = (int)(times[0][0])*60*60 + (int)(times[0][1])*60 + (int)(times[0][2])
+  endseconds = (int)(times[1][0])*60*60 + (int)(times[1][1])*60 + (int)(times[1][2])
+  dif = math.fabs(endseconds - startseconds) #fabs just so I could use more random time data.
+  #real solution would need to have dates in the log file to find elapsed time for entries that spanned multiple days
+  return dif
+  
+def addIfHighestWithMaxLineCap(minheap, dif, line, maxKeptLines):
   if len(minheap) < maxKeptLines:
     heapq.heappush(minheap, (dif, line))
   else: # more than max lines to keep, have to take away a record to add one
