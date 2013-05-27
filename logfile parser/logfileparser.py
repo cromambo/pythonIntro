@@ -16,6 +16,7 @@ I think, this can be done in python, but the interviewer did not ask me to write
 import re
 import sys
 import math
+# import heapq
 
 def ParseLogFile(filename, linecount):
   f = open(filename)
@@ -65,7 +66,7 @@ def main():
 
   with open(outfilename, 'w') as outfile:
     for element in sorted(worsttimeslist, reverse = True):
-      print (element[0], element[1], end='')
+      print (element[0], element[1]),
       outfile.write('%s seconds\t%s' % (element[0], element[1]))
 
 if __name__ == '__main__':
