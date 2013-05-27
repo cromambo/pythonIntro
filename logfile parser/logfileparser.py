@@ -16,30 +16,28 @@ I think, this can be done in python, but the interviewer did not ask me to write
 import re
 import sys
 import math
-# import heapq
+import heapq
 
 def ParseLogFile(filename, linecount):
-  f = open(filename)
-  list =[]
+  minheap =[]
   maxKeptLines = max(math.ceil(linecount / 100), 1)
-  for line in f:
-    times = re.findall('\s(\d\d):(\d\d):(\d\d)', line)
-    #list format [ dif, string of entire line ]
-    if len(times) == 2:
-      startseconds = (int)(times[0][0])*60*60 + (int)(times[0][1])*60 + (int)(times[0][2])
-      endseconds = (int)(times[1][0])*60*60 + (int)(times[1][1])*60 + (int)(times[1][2])
-      dif = math.fabs(endseconds - startseconds)
-      addIfTopOnePercent(list, dif, line, maxKeptLines)
-  f.close()
-  return list
+  with open(filename, 'r') as file:
+    for line in file:
+      times = re.findall('\s(\d\d):(\d\d):(\d\d)', line)
+      #minheap format ( dif, string of entire line ), heap sorts by dif
+      if len(times) == 2:
+        startseconds = (int)(times[0][0])*60*60 + (int)(times[0][1])*60 + (int)(times[0][2])
+        endseconds = (int)(times[1][0])*60*60 + (int)(times[1][1])*60 + (int)(times[1][2])
+        dif = math.fabs(endseconds - startseconds)
+        addIfTopOnePercent(minheap, dif, line, maxKeptLines)
+    
+  return minheap
 
-def addIfTopOnePercent(list, dif, line, maxKeptLines):
-  if len(list) < maxKeptLines:
-    list.append((dif, line))
-  else: # len(list) >= maxKeptLines:
-    if dif > min(list)[0]:
-      list.remove(min(list))
-      list.append((dif, line))
+def addIfTopOnePercent(minheap, dif, line, maxKeptLines):
+  if len(minheap) < maxKeptLines:
+    heapq.heappush(minheap, (dif, line))
+  else: # more than max lines to keep, have to take away a record to add one
+      heapq.heappushpop(minheap, (dif, line)) #push item to heap, then remove the smallest item from the heap
   return
 
 def countLines(filename):
@@ -47,7 +45,7 @@ def countLines(filename):
   with open(filename, 'r') as file:
     for line in file:
       count += 1
-  print ('Found', count, 'lines in', filename)
+  print ('Found %d lines in %s' %(count, filename))
   return count
   
 def main():
@@ -59,14 +57,14 @@ def main():
   
   linecount = countLines(filename)
   
-  worsttimeslist = ParseLogFile(filename, linecount)
-  print ('Length of result list:', len(worsttimeslist))
+  worsttimesminheap = ParseLogFile(filename, linecount)
+  print ('Length of result minheap:', len(worsttimesminheap))
   
   outfilename = re.findall('(.+)\.', filename)[0] + 'WorstCases.txt'
 
   with open(outfilename, 'w') as outfile:
-    for element in sorted(worsttimeslist, reverse = True):
-      print (element[0], element[1]),
+    for element in sorted(worsttimesminheap, reverse = True):
+      # print (element[0], element[1])
       outfile.write('%s seconds\t%s' % (element[0], element[1]))
 
 if __name__ == '__main__':
