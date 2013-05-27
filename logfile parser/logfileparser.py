@@ -17,6 +17,7 @@ import re
 import sys
 import math
 import heapq
+import datetime
 
 def ParseLogFile(filename, linecount):
   minheap =[]
@@ -55,10 +56,14 @@ def main():
     
   filename = sys.argv[1]
   
+  print 'Started line count:', datetime.datetime.now()
   linecount = countLines(filename)
+  print 'Ended line count:', datetime.datetime.now()
   
+  print 'Started Parse:', datetime.datetime.now()
   worsttimesminheap = ParseLogFile(filename, linecount)
-  print ('Length of result minheap:', len(worsttimesminheap))
+  print 'Ended Parse:', datetime.datetime.now()
+  print ('Length of result minheap: %d' % (len(worsttimesminheap)))
   
   outfilename = re.findall('(.+)\.', filename)[0] + 'WorstCases.txt'
 
