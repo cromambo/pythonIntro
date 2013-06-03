@@ -11,13 +11,13 @@ import re
 import os
 import shutil
 import commands
+import subprocess
 
 """Copy Special exercise
 """
 
 # +++your code here+++
 # Write functions and modify main() to call them
-
 
 
 def main():
@@ -27,6 +27,7 @@ def main():
   # Make a list of command line arguments, omitting the [0] element
   # which is the script itself.
   args = sys.argv[1:]
+  
   if not args:
     print "usage: [--todir dir][--tozip zipfile] dir [dir ...]";
     sys.exit(1)
@@ -39,6 +40,7 @@ def main():
     todir = args[1]
     del args[0:2]
 
+
   tozip = ''
   if args[0] == '--tozip':
     tozip = args[1]
@@ -47,9 +49,43 @@ def main():
   if len(args) == 0:
     print "error: must specify one or more dirs"
     sys.exit(1)
+    
+  dir = args[0]
+  
+  special = get_special_paths(dir)
+  print special
+  
+  SpecialFilesFullPaths = [os.path.join(dir, file) for file in special]
+  print SpecialFilesFullPaths
+  
+  if len(todir) != 0:
+    createdir(todir)
+    copytodir(SpecialFilesFullPaths, todir)
+  
+  if len(tozip) != 0:
+    createdir(tozip)
+    zipfilesIntoDir(SpecialFilesFullPaths, tozip, 'Specials.zip')
 
-  # +++your code here+++
-  # Call your functions
+def zipfilesIntoDir(FileListFullPaths, TargetDir, ZipName):
+  print 'zipping...'
+  args = ['7za', 'a', ZipName]+FileListFullPaths
+  print args
+  subprocess.Popen(args)
+  print 'zipped'
+  
+def copytodir(FilePathList, TargetDir):
+  for file in FilePathList:
+    shutil.copy(file, TargetDir)
+  
+def createdir(todir):  
+  if len(todir) != 0:
+    if os.path.exists(todir) == False:
+      os.mkdir(todir)
+
+def get_special_paths(dir):
+  listdir = os.listdir(dir)
+  special = [file for file in listdir if re.search('__\w+__', file)]
+  return special 
   
 if __name__ == "__main__":
   main()
