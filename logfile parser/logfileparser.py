@@ -20,7 +20,7 @@ import heapq
 import datetime
 
 def ParseLogFile(filename, linecount):
-  minheap =[]
+  minheap = []
   maxKeptLines = max(math.ceil(linecount / 100), 1)
   with open(filename, 'r') as file:
     for line in file:
