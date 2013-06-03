@@ -14,11 +14,9 @@
 # modify the passed in list.
 def remove_adjacent(nums):
   sololist = []
-  for i in range(len(nums)-1):
-    if nums[i] != nums[i+1]:
-      sololist.append(nums[i])
-  if sololist[-1:] != nums[-1:]:
-    sololist.append(nums[-1])
+  for num in nums:
+    if len(sololist) == 0 or num != sololist[-1]:
+      sololist.append(num)
   return sololist
 
   
@@ -33,15 +31,13 @@ def linear_merge(list1, list2):
   merged = []
   # len1 = len(list1)
   # len2 = len(list2)
-  while len(list1) > 0 and len(list2) > 0:
+  while len(list1) and len(list2):
     if(list1[0] < list2[0]):
       merged.append(list1.pop(0))
     else:
       merged.append(list2.pop(0))
-  if len(list1) > 0:
-    merged.extend(list1)
-  else:
-    merged.extend(list2)
+  merged.extend(list1)
+  merged.extend(list2)
   return merged
   #return sorted(list1 + list2) the easy way, but slower
 
