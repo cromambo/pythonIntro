@@ -1,4 +1,4 @@
-
+'''
 def exercise7():
   print 'Mary had a little lamb'
   print 'its fleece was white as %s' % 'snow'
@@ -41,14 +41,7 @@ def exercise9():
   
   print 'here are the days:', days
   print 'here are the months:', months
-  
-  print '''
-  theres something going on here.
-  with the three quotes
-  we'll be able to type as much as we like.
-  Even 5 lines if we want, or 5 or 6.
-  '''
-  
+
 def exercise10():
   tabby_cat = "\tI'm tabbed in."
   persian_cat = "I'm split\non a line."
@@ -71,10 +64,24 @@ def exercise10():
   for unused in xrange(1000):
     for i in ['/', '-', '|','\\','|']:
       print '%s\r' % i,
-
+'''
 def exercise11():
-  pass
-      
+  print ('How old are you?'),
+  age = raw_input()
+  print ('How tall are you?'),
+  height = raw_input()
+  print ('How much do you weigh?'),
+  weight = raw_input()
+  
+  print ('So you\'re %s old, %s tall and %s heavy' % (age, height, weight))
+
+def exercise12():
+  age = raw_input('How old are you? ')
+  height = raw_input('How tall are you? ')
+  weight = raw_input('How much do you weigh? ')
+  
+  print ('So you\'re %s old, %s tall and %s heavy' % (age, height, weight))
+  
 def main():
   print ('hello world')
   '''
@@ -137,6 +144,6 @@ def main():
   #this line is tricky, try to get it exactly right
   print "If I add %d, %d, and %d I get %d" %(age, height, weight, age + height + weight)
   '''
-  exercise11()
+  exercise12()
 if __name__ == '__main__':
   main()
