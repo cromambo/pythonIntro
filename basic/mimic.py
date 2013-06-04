@@ -62,15 +62,13 @@ def mimic_dict(filename):
 
 def print_mimic(mimic_dict, word):
   """Given mimic dict and start word, prints 200 random words."""
-  iterations = 200
-  while iterations > 0:
-    iterations -= 1
+  for unused_int in xrange(200):
+    if (unused_int+1)%30 == 0: #this is to break up the text instead of one giant line to the console,
+      print
     if word in mimic_dict: 
       word = random.choice(mimic_dict[word])
-      print (word, end=' ')
+      print word,
     else: word = ''
-    if iterations%30 == 0:
-      print()
   return
 
 
