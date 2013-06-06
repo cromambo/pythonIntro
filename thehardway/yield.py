@@ -59,46 +59,84 @@ def is_prime(n):
     base += 6
   return True
  
-def get_primes(number):
+def prime_gen():
+  #2, 3, 5, 7, 11, 13, 17, 19
+  yield 2
+  yield 3
+  n = 5
+  base = 5
+  while True:
+    if n % 2 == 0 or n % 3 == 0: #if divisible, then isnt prime
+      root = int(n**0.5)
+    if n%base == 0:
+      n = base
+      yield base      
+    if n%(base+2) == 0:
+      n = base
+      yield base + 2
+    base += 6
+    n += 6
+    
+#500001th prime 7368791
+#time: 40.6859998703    
+def get_primes_brute(number):
   while True: 
     if is_prime(number):
       yield number
     number += 1
+
+#this is marginally faster than trying every number, doesnt let you pick a starting number
+#500001th prime 7368791
+#time: 39.2239999771
+
+def get_primes():
+  yield 2
+  yield 3
+  number = 5
+  while True: 
+    if is_prime(number):
+      yield number
+    if is_prime(number+2):
+      yield number + 2
+    number += 6
     
-  #euler #7, find the 10001st prime
+    
+#euler #7, find the 10001st prime
 def find_the_xth_prime(x):
   if not int(x) >= 1:
     return 'Error: x must be a positive number'
 
-  gen = get_primes(2)
-  for i in xrange(1, x+1):
-    prime = gen.next()
-    if i == x:
-      return prime
+  gen = get_primes()
+  for i in range(1, x):
+    next(gen)
+  return next(gen)
 
   #euler #10, sum of primes under 2 million
 def sum_of_primes_under_x(x):
   if not int(x) >= 2:
     return 'Error: x must be a positive number 2 or greater'
     
-  gen = get_primes(2)
+  gen = get_primes()
   next_prime, sum = 0, 0
   while next_prime < x:
     sum += next_prime
-    next_prime = gen.next()
+    next_prime = next(gen)
   return sum
      
 def main():
   time_start = time.time()
 
 
-  # print 'prime count:', sum_of_primes_under_x(2000000)
+  print ('prime count:', sum_of_primes_under_x(200000))
   x = 10001
-  print '%dth prime' % x, find_the_xth_prime(x)
+  print ('%dth prime' % x, find_the_xth_prime(x))
 
+  gen = get_primes_brute(100)
+  for i in range(0, 10):
+    print (next(gen))
   
   time_end = time.time()
-  print 'time:', time_end - time_start
+  print ('time:', time_end - time_start)
   
 
 
