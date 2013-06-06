@@ -75,46 +75,49 @@ def is_prime(n):
     if n%(base+2) == 0: return False
     base += 6
   return True
-  
-def summation(list):
-  sum = 0
-  for element in list:
-    sum += int(element)
-  return sum
-  
+ 
 def get_primes(number):
   while True: 
     if is_prime(number):
       yield number
     number += 1
-  
+    
+  #euler #7, find the 10001st prime
+def find_the_xth_prime(x):
+  if not int(x) >= 1:
+    return 'Error: x must be a positive number'
+
+  gen = get_primes(2)
+  for i in xrange(1, x+1):
+    prime = gen.next()
+    if i == x:
+      return prime
+
+  #euler #10, sum of primes under 2 million
+def sum_of_primes_under_x(x):
+  if not int(x) >= 2:
+    return 'Error: x must be a positive number 2 or greater'
+    
+  gen = get_primes(2)
+  next_prime, sum = 0, 0
+  while next_prime < x:
+    sum += next_prime
+    next_prime = gen.next()
+  return sum
+     
 def main():
   time_start = time.time()
-  gen = get_primes(2)
 
-  find_prime_number_this = 1000000
-  for i in xrange(1, find_prime_number_this+1):
-    prime = gen.next()
-    if i == find_prime_number_this:
-      print 'prime count:', i, prime
-  
-  
-  '''
-  #euler #10, sum of primes under 2 million
-  next_prime = 0
-  sum = 0
-  while next_prime < 2000000:
-    next_prime = gen.next()
-    sum += next_prime
-  print 'sum:', sum
-  '''
+
+  # print 'prime count:', sum_of_primes_under_x(2000000)
+  x = 10001
+  print '%dth prime' % x, find_the_xth_prime(x)
+
   
   time_end = time.time()
   print 'time:', time_end - time_start
   
-  #crummy non generator way to do it:
-  # primes = get_primes(xrange(2, 2000000))
-  # sum = summation(primes)
+
 
 if __name__ == '__main__':
   main()
