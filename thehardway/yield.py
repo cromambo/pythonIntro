@@ -26,23 +26,6 @@ $100
 
 import time
 
-#6.865 sec for primes under 1 million
-#17.19 sec for primes under 2 million
-def is_prime2(n):
-    """"precondition n is a nonnegative integer
-postcondition:  return True if n is prime and False otherwise."""
-    if n < 2: 
-         return False;
-    if n % 2 == 0:
-         # return False
-         return n == 2
-    k = 3
-    while k*k <= n:
-         if n % k == 0:
-             return False
-         k += 2
-    return True
-
 #4.5 second for primes under 1 million
 #10.73 second for primes under 2 million
 #6.86 second for primes under 2 million with generator method
