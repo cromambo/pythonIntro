@@ -84,6 +84,14 @@ def exercise12():
   
 def main():
   print ('hello world')
+    # exercise12()
+  val = 50
+  if val > 55:
+    print 'a'
+  elif val > 45:
+    print 'b'
+  else:
+    print 'c'
   '''
   print 'i will now count my chickens:'
   
@@ -144,6 +152,6 @@ def main():
   #this line is tricky, try to get it exactly right
   print "If I add %d, %d, and %d I get %d" %(age, height, weight, age + height + weight)
   '''
-  exercise12()
+
 if __name__ == '__main__':
   main()
