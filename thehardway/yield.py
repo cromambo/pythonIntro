@@ -172,22 +172,50 @@ def euler4():
   Find the largest palindrome made from the product of two 3-digit numbers.
   '''
   Sourceformat = ' %dx%d '
-  palindromes = {}
+  palindromes = collections.Counter()#(str)
   for i in range(999, 100, -1):
     for j in range(999, 100, -1):
       multiple = i*j       
       if is_palidrome(multiple):
-        if multiple in palindromes:
-          palindromes[multiple] += Sourceformat % (i, j)
-        else:
-          palindromes[multiple] = Sourceformat % (i, j)
+        palindromes[multiple] += 1#(Sourceformat % (i, j))
         break
   for key in sorted(palindromes.keys()):
     print ('key:', key, 'Source:', palindromes[key])
   return max(palindromes.keys())
   
-def euler5():
-  pass
+  # s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
+  # d = collections.defaultdict()
+  # for k, v in s:
+    # d[k].append(v)
+  # print(d.items())
+  
+def euler5(max_divisible):
+  '''
+  2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+
+  What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+  '''
+  # ending bound is 1 through 20 multiplied together
+  #start is 20, step is 20
+  #check numbers in range
+    #for each number in range, check if its divisible by numbers in range 1-20
+  passed = []
+  for test in range(max_divisible, factorial(max_divisible), max_divisible):
+    #for:else construct with break, else is reached if for terminates without a break
+    for divisor in range(1, max_divisible):
+      if test % divisor != 0:
+        break
+    else: 
+      passed.append(test)
+      break #looking for smallest number, so stop trying when found
+      
+  print (passed)
+  
+def factorial(max):
+  if max == 1:
+    return 1
+  return (max * factorial(max-1))
+  
 def euler3():
   '''The prime factors of 13195 are 5, 7, 13 and 29.
   What is the largest prime factor of the number 600851475143 ?
@@ -219,13 +247,8 @@ def euler2():
 def main():
   time_start = time.time()
   
-  s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
-  d = collections.defaultdict(int)
-  for k, v in s:
-    d[k].append(v)
-  print(d.items())
-
-  # print (euler4())
+  print (factorial(20))
+  print (euler5(20))
 
   # print ('prime count:', sum_of_primes_under_x(200000))
   # x = 10001
