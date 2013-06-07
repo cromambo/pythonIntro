@@ -25,6 +25,7 @@ $100
 ...    print cash'''
 
 import time
+import collections
 
 #4.5 second for primes under 1 million
 #10.73 second for primes under 2 million
@@ -59,7 +60,7 @@ def is_prime(n):
     base += 6
   return True
  
-def prime_gen():
+def prime_gen(): # doesnt work!
   #2, 3, 5, 7, 11, 13, 17, 19
   yield 2
   yield 3
@@ -122,18 +123,117 @@ def sum_of_primes_under_x(x):
     sum += next_prime
     next_prime = next(gen)
   return sum
-     
+
+def fibonacci_gen():
+  a = 1
+  b = 1
+  while True:
+    a, b = b, a+b
+    yield a
+
+def multiples_of_x_or_y_gen(x, y):
+  count = 1
+  while True:
+    # print (count)
+    if count % x == 0 or count % y == 0:
+      yield count
+    count += 1
+
+def factors(num):
+  root = int((num ** 0.5)) + 1
+  factors = []
+  for i in range(1, root):
+    if num % i == 0:
+      factors.append(i)
+      factors.append(int(num / i))
+  print ('num:', num, 'factors:', factors)
+  return sorted(factors)
+
+def primes_in_list(list):
+  # primes = []
+  # for i in enumerate(list):
+    # if is_prime(i):
+      # primes.append(i)
+  return [i for i in list if is_prime(i)]
+  
+def sum_of_list(list):
+  return sum(list)
+ 
+
+def is_palidrome(num):
+  string = str(num)
+  #extended slice syntax [begin:end:step]
+  reverse = string[::-1]
+  return string == reverse
+  
+def euler4():
+  '''A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 99.
+
+  Find the largest palindrome made from the product of two 3-digit numbers.
+  '''
+  Sourceformat = ' %dx%d '
+  palindromes = {}
+  for i in range(999, 100, -1):
+    for j in range(999, 100, -1):
+      multiple = i*j       
+      if is_palidrome(multiple):
+        if multiple in palindromes:
+          palindromes[multiple] += Sourceformat % (i, j)
+        else:
+          palindromes[multiple] = Sourceformat % (i, j)
+        break
+  for key in sorted(palindromes.keys()):
+    print ('key:', key, 'Source:', palindromes[key])
+  return max(palindromes.keys())
+  
+def euler5():
+  pass
+def euler3():
+  '''The prime factors of 13195 are 5, 7, 13 and 29.
+  What is the largest prime factor of the number 600851475143 ?
+  '''    
+  factorList = factors(600851475143)
+  primes = primes_in_list(factorList)
+  print (primes[-1])
+  
+def euler1():
+  sum = 0
+  gen = multiples_of_x_or_y_gen(3, 5)
+  multiple = 0
+  while multiple < 1000:
+    sum += multiple
+    multiple = next(gen)
+  return sum
+  
+def euler2():
+  fibgen = fibonacci_gen()
+  val = 0
+  sum = 0
+  while val < 4000000:
+    # print (val)
+    if val % 2 == 0:
+      sum += val
+    val = next(fibgen)
+  print ('sum:', sum)
+    
 def main():
   time_start = time.time()
+  
+  s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
+  d = collections.defaultdict(int)
+  for k, v in s:
+    d[k].append(v)
+  print(d.items())
 
+  # print (euler4())
 
-  print ('prime count:', sum_of_primes_under_x(200000))
-  x = 10001
-  print ('%dth prime' % x, find_the_xth_prime(x))
+  # print ('prime count:', sum_of_primes_under_x(200000))
+  # x = 10001
+  # print ('%dth prime' % x, find_the_xth_prime(x))
 
-  gen = get_primes_brute(100)
-  for i in range(0, 10):
-    print (next(gen))
+  # gen = get_primes_brute(100)
+  # for i in range(0, 10):
+    # print (next(gen))
   
   time_end = time.time()
   print ('time:', time_end - time_start)
